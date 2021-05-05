@@ -7,7 +7,7 @@
     "cleanup": "rm -rf .cache dist",
     "build": "vue-cli-service build --public-url https://koffeeya.github.io/film101-syllabi/",
     "deploy": "gh-pages -d dist",
-    "push": "yarn build && yarn deploy"
+    "push": "yarn cleanup && yarn build && yarn deploy"
   },
   "dependencies": {
     "core-js": "^3.6.5",

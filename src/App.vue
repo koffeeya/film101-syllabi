@@ -4,12 +4,25 @@
 </template>
 
 <script>
+import * as d3 from "d3";
 import HelloWorld from "./components/HelloWorld.vue";
 
 export default {
   name: "App",
+  data() {
+    return {
+      rawData: [],
+    };
+  },
   components: {
     HelloWorld,
+  },
+  created() {
+    // Load in the data
+    Promise.all([d3.csv("./syllabi.csv", d3.autoType)]).then(([data]) => {
+      this.rawData = data;
+      console.log(this.rawData);
+    });
   },
 };
 </script>
