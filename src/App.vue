@@ -1,39 +1,145 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello there!" />
+  <div class="content-area">
+    <div class="syllabi-container">
+      <HelloWorld
+        v-for="syllabus in data"
+        :key="syllabus.Syllabus_Id"
+        :meta="syllabus.meta"
+        :films="syllabus.films"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
 import * as d3 from "d3";
-import HelloWorld from "./components/HelloWorld.vue";
+import {
+  tidy,
+  select,
+  startsWith,
+  groupBy,
+  rename,
+  distinct,
+  summarize,
+  fullJoin,
+  mutate,
+} from "@tidyjs/tidy";
+import HelloWorld from "./components/SyllabusComponent.vue";
 
 export default {
   name: "App",
   data() {
     return {
-      rawData: [],
+      raw: null,
+      data: null,
+      syllabi: null,
+      films: null,
+      tags: [
+        "Film Theory & History",
+        "Cinematography & Perspective",
+        "Narrative & Story",
+        "Experimental / Animation",
+        "Minority Narratives & Spectatorship",
+        "Style & Aesthetics",
+        "Editing",
+        "Mise-en-scene",
+        "Film Form & Audience",
+        "Sound & Music",
+        "Genre",
+        "Industry & Culture",
+        "Hollywood & Classical Cinema",
+        "Documentary & Nonfiction",
+        "Methods & Analysis",
+        "Filmmaking & Production",
+        "Ideology",
+        "Authorship",
+        "The Idea of Film",
+      ],
     };
   },
   components: {
     HelloWorld,
   },
+  methods: {
+    getItemsInObj(obj, name) {
+      if (obj === undefined) {
+        return [];
+      } else if (obj.length === 0) {
+        return [];
+      } else {
+        const len = obj.length;
+        const arr = [];
+        for (let row = 0; row < len; row++) {
+          const value = Object.values(obj)[row][name];
+          arr.push(value);
+        }
+        const unique = new Set(arr);
+        return Array.from(unique);
+      }
+    },
+    cleanData(data) {
+      const results = tidy(
+        data,
+        select([
+          "Syllabus_Id",
+          "Section_Id",
+          "Section_Name",
+          startsWith("Film_"),
+          "Tags",
+        ]),
+        groupBy(
+          ["Syllabus_Id", "Film_Id"],
+          [],
+          groupBy.levels({
+            levels: ["entries-object", "object"],
+            single: true,
+          })
+        ),
+        rename({
+          key: "Syllabus_Id",
+          values: "films",
+        })
+      );
+      const syllabiData = tidy(
+        data,
+        select([startsWith("Syllabus_")]),
+        distinct(["Syllabus_Id"]),
+        groupBy(["Syllabus_Id"], [summarize({ meta: (meta) => meta })])
+      );
+      this.data = tidy(
+        results,
+        fullJoin(syllabiData, { by: ["Syllabus_Id", "Syllabus_Id"] }),
+        mutate({
+          meta: (d) => d.meta[0],
+        })
+      );
+      this.syllabi = this.getItemsInObj(results, "Syllabus_Id");
+      this.films = this.getItemsInObj(this.raw, "Film_Id");
+    },
+  },
   created() {
     // Load in the data
     Promise.all([d3.csv("./syllabi.csv", d3.autoType)]).then(([data]) => {
-      this.rawData = data;
-      console.log(this.rawData);
+      this.raw = data;
+      this.cleanData(this.raw);
     });
   },
 };
 </script>
 
 <style>
+html {
+  background-color: white;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+
+.syllabi-container {
+  display: grid;
+  grid-template-columns: repeat(44, 1fr);
+  column-gap: 2px;
 }
 </style>
