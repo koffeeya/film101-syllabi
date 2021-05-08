@@ -9,7 +9,16 @@
       highlightFilmsReset(`${filmData.Film_Id}`, `${filmData.Syllabus_Id}`)
     "
   >
-    <div class="image-wrapper"><img class="poster" :src="posterUrl" /></div>
+    <div
+      class="image-wrapper"
+      :style="{ height: imgHeight + 'px', width: imgWidth + 'px' }"
+    >
+      <img
+        class="poster"
+        :src="posterUrl"
+        :style="{ maxHeight: imgHeight * 1.8 + 'px' }"
+      />
+    </div>
   </div>
 </template>
 
@@ -17,7 +26,7 @@
 import * as d3 from "d3";
 export default {
   name: "FilmComponent",
-  props: ["msg", "filmData"],
+  props: ["msg", "filmData", "imgHeight", "imgWidth"],
   methods: {
     highlightFilms(className, syllabusName) {
       d3.selectAll(`.${className} > div > img`)
@@ -44,16 +53,17 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
+<!-- clip-path: polygon(100% 0%, 100% 70%, 50% 100%, 0% 70%, 0% 0%, 50% 30%); margin-top: -14px; -->
 <style scoped>
 .image-wrapper {
-  clip-path: polygon(100% 0%, 100% 70%, 50% 100%, 0% 70%, 0% 0%, 50% 30%);
-  height: 50px;
-  margin-top: -14px;
+  overflow: hidden;
 }
 
 img {
-  width: 100%;
-  filter: grayscale(100%) url("#teal-lightgreen");
+  object-fit: cover;
+  filter: grayscale(90%);
+  border-top: 3px solid black;
+  border-bottom: 3px solid black;
   /* border: 5px solid white; */
 }
 </style>

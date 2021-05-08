@@ -6,6 +6,7 @@
         :key="syllabus.Syllabus_Id"
         :meta="syllabus.meta"
         :films="syllabus.films"
+        :syllabi="syllabi"
       />
     </div>
   </div>
@@ -129,7 +130,7 @@ export default {
 
 <style>
 html {
-  background-color: white;
+  background-color: black;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -140,6 +141,6 @@ html {
 .syllabi-container {
   display: grid;
   grid-template-columns: repeat(44, 1fr);
-  column-gap: 2px;
+  column-gap: 0px;
 }
 </style>

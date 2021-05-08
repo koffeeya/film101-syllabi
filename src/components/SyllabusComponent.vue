@@ -1,11 +1,17 @@
 <template>
-  <div class="syllabus-section" :class="[`${meta.Syllabus_Id}`]">
+  <div
+    ref="syllabi-section"
+    class="syllabus-section"
+    :class="[`${meta.Syllabus_Id}`]"
+  >
     <p>{{ msg }}</p>
     <FilmComponent
       v-for="film in films"
       :key="film.Film_Id"
       :filmData="film"
       :msg="film.Film_Title"
+      :imgHeight="imageHeight"
+      :imgWidth="imageWidth"
     />
   </div>
 </template>
@@ -14,9 +20,27 @@
 import FilmComponent from "./FilmComponent.vue";
 export default {
   name: "SyllabusComponent",
-  props: ["msg", "films", "meta"],
+  props: ["msg", "films", "meta", "syllabi"],
+  data() {
+    return {
+      windowHeight: window.innerHeight * 0.9,
+      windowWidth: window.innerWidth * 0.8,
+    };
+  },
   components: {
     FilmComponent,
+  },
+  computed: {
+    imageHeight() {
+      const numFilms = Object.keys(this.films).length;
+      const imgHeight = this.windowHeight / numFilms;
+      return imgHeight;
+    },
+    imageWidth() {
+      const numSyllabi = this.syllabi.length;
+      const imgWidth = this.windowWidth / numSyllabi;
+      return imgWidth;
+    },
   },
 };
 </script>
