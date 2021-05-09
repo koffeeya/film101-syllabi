@@ -1,7 +1,8 @@
 <template>
   <div class="content-area">
+    <div class="film-sidebar">Film area</div>
     <div class="syllabi-container">
-      <HelloWorld
+      <SyllabusComponent
         v-for="syllabus in data"
         :key="syllabus.Syllabus_Id"
         :meta="syllabus.meta"
@@ -25,7 +26,7 @@ import {
   fullJoin,
   mutate,
 } from "@tidyjs/tidy";
-import HelloWorld from "./components/SyllabusComponent.vue";
+import SyllabusComponent from "./components/SyllabusComponent.vue";
 
 export default {
   name: "App",
@@ -59,7 +60,7 @@ export default {
     };
   },
   components: {
-    HelloWorld,
+    SyllabusComponent,
   },
   methods: {
     getItemsInObj(obj, name) {
@@ -138,9 +139,19 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.content-area {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
 .syllabi-container {
   display: grid;
   grid-template-columns: repeat(44, 1fr);
   column-gap: 0px;
+}
+
+.film-sidebar {
+  background-color: rgb(22, 22, 22);
+  margin: 10px;
 }
 </style>

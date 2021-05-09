@@ -23,8 +23,8 @@ export default {
   props: ["msg", "films", "meta", "syllabi"],
   data() {
     return {
-      windowHeight: window.innerHeight * 0.9,
-      windowWidth: window.innerWidth * 0.8,
+      windowHeight: window.innerHeight * 0.8,
+      windowWidth: window.innerWidth * 0.75,
     };
   },
   components: {

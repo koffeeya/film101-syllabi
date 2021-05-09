@@ -16,7 +16,7 @@
       <img
         class="poster"
         :src="posterUrl"
-        :style="{ maxHeight: imgHeight * 1.8 + 'px' }"
+        :style="{ height: imgHeight + 'px', width: imgWidth + 'px' }"
       />
     </div>
   </div>
@@ -32,20 +32,27 @@ export default {
       d3.selectAll(`.${className} > div > img`)
         .transition()
         .duration(100)
-        .style("filter", "grayscale(0%)")
-        .style("cursor", "pointer");
+        .style(
+          "filter",
+          "grayscale(0%) brightness(100%) drop-shadow(0 0 0.75rem white)"
+        );
       //d3.selectAll(`.${syllabusName}`).style("z-index", "200");
     },
     highlightFilmsReset(className, syllabusName) {
       d3.selectAll(`.${className} > div > img`)
         .transition()
         .duration(100)
-        .style("filter", "grayscale(100%)");
+        .style("filter", "grayscale(100%) brightness(35%)");
       //d3.selectAll(`.${syllabusName}`).style("z-index", 0);
     },
   },
   computed: {
     posterUrl() {
+      if (
+        this.filmData.Film_Poster === null ||
+        this.filmData.Film_Poster === undefined
+      ) {
+      }
       return this.filmData.Film_Poster;
     },
   },
@@ -57,13 +64,27 @@ export default {
 <style scoped>
 .image-wrapper {
   overflow: hidden;
+  display: block;
+  margin: auto;
+  border: 1px solid black;
+  position: relative;
 }
+
+/* filter: grayscale(90%); */
 
 img {
   object-fit: cover;
-  filter: grayscale(90%);
-  border-top: 3px solid black;
-  border-bottom: 3px solid black;
-  /* border: 5px solid white; */
+  display: block;
+  filter: grayscale(100%) brightness(35%);
+  margin: auto;
+}
+
+.image-wrapper:hover {
+  border: 1px solid white;
+  cursor: pointer;
+  transform-origin: center;
+  transform: scale(2);
+  z-index: 50;
+  filter: drop-shadow(0 0 0.75rem white);
 }
 </style>
