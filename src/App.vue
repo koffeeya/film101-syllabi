@@ -86,6 +86,10 @@ export default {
           "Syllabus_Id",
           "Section_Id",
           "Section_Name",
+          "Syllabus_Number",
+          "Syllabus_School",
+          "Syllabus_Sem",
+          "Syllabus_Year",
           startsWith("Film_"),
           "Tags",
         ]),
@@ -137,6 +141,7 @@ html {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: white;
 }
 
 .content-area {
